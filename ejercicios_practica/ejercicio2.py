@@ -35,6 +35,35 @@ if __name__ == '__main__':
     # gráfico en el eje "x" está cada uno de los 10 usuarios y en el eje
     # "y" la cantidad de títulos completados
 
+
+    response = requests.get(url)
+    data=json.loads(response.text)
+    data = response.json()
+
+    user_completed = {}
+
+    for user in data:
+        if user["completed"] == True:
+            if user["userId"] in user_completed.keys():
+                user_completed[user["userId"]] += 1
+            else:
+                user_completed[user["userId"]] = 1
+            
+    print(json.dumps(user_completed, indent=4))
+    
+
+    fig = plt.figure()
+    fig.suptitle('Usuarios y Libros Completados', fontsize = 18)
+    ax = fig.add_subplot()
+    
+    ax.bar(user_completed.keys(), user_completed.values())
+    ax.grid(c = 'navy', ls = 'dotted')
+    ax.set_facecolor('aliceblue')
+    ax.set_ylabel('Libros Completados')
+    ax.set_xlabel('Usuarios')
+
+    plt.show()
+
     # Para poder ir haciendo esto debe ir almacenando la información
     # de cada usuario a medida que "itera" en un bucle los datos
     # del JSON recolectado. Al finalizar el bucle deberá tener la data
@@ -47,3 +76,4 @@ if __name__ == '__main__':
     # los datos recolectados son correctos.
 
     print("terminamos")
+    
